@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="navbar.css"> 
+    <title>Discussion Forum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-image: url('img_bg.png');
+            background-size: cover;
+            background-position: center;
+            color:#ccc;
+        }
+        h2,h3{
+            color: #ccc;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: black;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .post {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            color: #ccc;
+        }
+        .comments {
+            margin-left: 20px;
+            font-size: 14px;
+        }
+        .comment-box {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+
+    <script>
+        fetch("navbar.html")
+            .then(response => response.text())
+            .then(data => document.getElementById("nav-placeholder").innerHTML = data);
+    </script>
+    <div class="container">
+        <h2>Discussion Forum</h2>
+        
+        <div id="posts">
+            <div class="post">
+                <p><strong>User1:</strong> What are the best ways to stay fit?</p>
+                <div class="comments">
+                    <p><strong>User2:</strong> Regular exercise and a balanced diet help a lot.</p>
+                    <p><strong>User3:</strong> Drinking enough water is also important.</p>
+                </div>
+                <div class="comment-box">
+                    <input type="text" placeholder="Add a comment..." class="comment-input">
+                    <button onclick="addComment(this)">Comment</button>
+                </div>
+            </div>
+            
+            <div class="post">
+                <p><strong>User4:</strong> Any recommendations for reducing stress?</p>
+                <div class="comments">
+                    <p><strong>User5:</strong> Meditation and deep breathing exercises work wonders.</p>
+                    <p><strong>User6:</strong> Try listening to relaxing music or reading a book.</p>
+                </div>
+                <div class="comment-box">
+                    <input type="text" placeholder="Add a comment..." class="comment-input">
+                    <button onclick="addComment(this)">Comment</button>
+                </div>
+            </div>
+        </div>
+        
+        <h3>Start a Discussion</h3>
+        <textarea id="postContent" placeholder="Write your post..."></textarea>
+        <button onclick="addPost()">Post</button>
+    </div>
+
+    <script>
+        function addPost() {
+            let content = document.getElementById("postContent").value;
+            if (content.trim() === "") return;
+            
+            let postContainer = document.getElementById("posts");
+            let newPost = document.createElement("div");
+            newPost.classList.add("post");
+            newPost.innerHTML = `<p><strong>You:</strong> ${content}</p>
+                                 <div class="comments"></div>
+                                 <div class="comment-box">
+                                     <input type="text" placeholder="Add a comment..." class="comment-input">
+                                     <button onclick="addComment(this)">Comment</button>
+                                 </div>`;
+            postContainer.prepend(newPost);
+            document.getElementById("postContent").value = "";
+        }
+
+        function addComment(button) {
+            let commentInput = button.previousElementSibling;
+            let commentText = commentInput.value;
+            if (commentText.trim() === "") return;
+            
+            let commentsSection = button.parentElement.previousElementSibling;
+            let newComment = document.createElement("p");
+            newComment.innerHTML = `<strong>You:</strong> ${commentText}`;
+            commentsSection.appendChild(newComment);
+            commentInput.value = "";
+        }
+    </script>
+</body>
+</html>

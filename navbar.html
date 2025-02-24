@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="navbar">
+        <span id="welcomeUser">Welcome, Guest</span>
+        <a href="index.html">Home</a>
+        <a href="health_form.html">Check Health</a>
+        <a href="discussion.html">Discussion</a>
+        <a href="order.html">Order</a>
+        <button onclick="logout()">Logout</button>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let username = localStorage.getItem("username") || "Guest";
+            document.getElementById("welcomeUser").innerText = "Welcome, " + username;
+        });
+    
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "index.html";
+        }
+    </script>
+    
+</body>
+</html>
