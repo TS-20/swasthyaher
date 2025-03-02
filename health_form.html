@@ -12,6 +12,11 @@
         .container{
             color: aliceblue;
         }
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #f39c12;
+        }
     </style>
 </head>
 <body>
@@ -23,10 +28,7 @@
     </script>
     <div class="container">
         <h2>Health Data Form</h2>
-        <form id="form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" required />
-
+        <form id="health_form">
             <label for="age">Age:</label>
             <input type="number" id="age" required />
 
@@ -72,6 +74,7 @@
             <br>
             <button type="submit">Submit</button>
         </form>
+        <div id="result"></div>
     </div>
 
     <script>
@@ -85,6 +88,41 @@
                 document.getElementById("bmi").value = "";
             }
         }
+        // Function to handle form submission
+        document.getElementById("health_form").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent page reload
+
+        // Collect form data
+            const formData = {
+                age: document.getElementById("age").value,
+                height: document.getElementById("height").value,
+                weight: document.getElementById("weight").value,
+                bmi: document.getElementById("bmi").value,
+                bp_systolic: document.getElementById("bp_systolic").value,
+                bp_diastolic: document.getElementById("bp_diastolic").value,
+                cycle_length: document.getElementById("cycle_length").value,
+                awareness_of_mental_health: document.getElementById("awareness_of_mental_health").value,
+                perception_of_therapy: document.getElementById("perception_of_therapy").value,
+                sleep_duration: document.getElementById("sleep_duration").value,
+                stress_level: document.getElementById("stress_level").value,
+                physical_activity_level: document.getElementById("physical_activity_level").value
+            };
+
+            // Send data to the backend API
+            try {
+                const response = await fetch("http://127.0.0.1:5000/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                document.getElementById("result").innerText = "PCOS Risk Level: " + data.pcos_risk;
+            } catch (error) {
+                document.getElementById("result").innerText = "Error predicting PCOS risk. Try again.";
+                console.error("Error:", error);
+            }
+        });
     </script>
 </body>
 </html>
